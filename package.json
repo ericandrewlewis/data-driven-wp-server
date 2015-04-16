@@ -1,0 +1,23 @@
+{
+  "name": "data-driven-wp-server",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ericandrewlewis/data-driven-wp-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericandrewlewis/data-driven-wp-server/issues"
+  },
+  "homepage": "https://github.com/ericandrewlewis/data-driven-wp-server",
+  "dependencies": {
+    "mongodb": "~2.0.27",
+    "express": "~4.12.3"
+  }
+}
