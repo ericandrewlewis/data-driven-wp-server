@@ -28,9 +28,7 @@ app.all( '*', function(request, response, next) {
 
 app.post('/', function (request, response, next) {
 	openDBConnection(function(mongoDB) {
-		mongoDB.collection('events').save(request.body, function (err, result) {
-			assert.equal(err, null);
-		});
+		mongoDB.collection('events').save(request.body, function (err, result) {});
 	});
 });
 
