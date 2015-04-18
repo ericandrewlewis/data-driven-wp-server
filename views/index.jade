@@ -1,0 +1,21 @@
+html
+	head
+		title!= title
+	body
+		h1 All data
+		table
+			thead
+				tr
+					td User (md5 hash of site_url + user_id)
+					td Browser width
+					td Browser height
+					td User agent
+					td touch
+			tbody
+				each event in events
+					tr
+						td= event.uniqueHash
+						td= event.browser.width
+						td= event.browser.height
+						td= event.browser.ua
+						td= event.touch

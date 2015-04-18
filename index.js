@@ -4,11 +4,17 @@ var express = require('express'),
 	bodyParser = require('body-parser')
 	dbConnection = null;
 
+// Use Jade as the templating engine alongside Express.
+app.set('view engine', 'jade');
+app.set('views', './views');
+
 // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 /**
  * Get the db connection and run the specified callback.
+ *
+ * @param {callback} Callback to be invoked.
  */
 var db = function(callback) {
 	if (dbConnection) {
@@ -23,6 +29,9 @@ var db = function(callback) {
 	});
 }
 
+/**
+ * Add proper CORS headers to allow endpoints to be accessed in browsers over AJAX.
+ */
 app.all( '*', function(request, response, next) {
 	response.header("Access-Control-Allow-Origin", "*");
 	response.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -30,6 +39,26 @@ app.all( '*', function(request, response, next) {
 	next();
 });
 
+/**
+ * GET handler for displaying user data.
+ */
+app.get('/', function (request, response) {
+	// At least some privacy.
+	if ( typeof request.query.opensesame === 'undefined' ) {
+		response.status(403).send('You did not say the magic word.');
+		return;
+	}
+	db(function(mongo){
+		mongo.collection('events').find().limit(100).toArray(function(err,events) {
+			response.render('index', { events: events });
+		});
+	});
+});
+
+
+/**
+ * POST handler for saving user data.
+ */
 app.post('/', function (request, response, next) {
 	response.status(200).send();
 	db(function(mongo) {
@@ -37,11 +66,11 @@ app.post('/', function (request, response, next) {
 	});
 });
 
+/**
+ * Listen for incoming requests.
+ */
 var server = app.listen(1337, function () {
-
 	var host = server.address().address;
 	var port = server.address().port;
-
-	console.log('Example app listening at http://%s:%s', host, port);
-
+	console.log('Listening on http://%s:%s', host, port);
 });
