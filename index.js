@@ -1,21 +1,25 @@
 var express = require('express'),
 	app = express(),
 	MongoClient = require('mongodb').MongoClient,
-	bodyParser = require('body-parser');
+	bodyParser = require('body-parser')
+	dbConnection = null;
 
 // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 /**
- * Initialize the connection to the Mongodb daemon.
- *
- * @fires `mongodb:connected` on the application.
+ * Get the db connection and run the specified callback.
  */
-var openDBConnection = function(callback) {
+var db = function(callback) {
+	if (dbConnection) {
+		callback(dbConnection);
+		return;
+	}
 	var url = 'mongodb://localhost:27017/data-driven-wp';
-	MongoClient.connect(url, function (err, mongoDB) {
-		console.log("Connected correctly to server");
-		callback(mongoDB);
+	MongoClient.connect(url, function (err, mongo) {
+		console.log('Connected to mongo.');
+		dbConnection = mongo;
+		callback(dbConnection);
 	});
 }
 
@@ -28,8 +32,8 @@ app.all( '*', function(request, response, next) {
 
 app.post('/', function (request, response, next) {
 	response.status(200).send();
-	openDBConnection(function(mongoDB) {
-		mongoDB.collection('events').save(request.body, function (err, result) {});
+	db(function(mongo) {
+		mongo.collection('events').save(request.body, function (err, result) {});
 	});
 });
 
