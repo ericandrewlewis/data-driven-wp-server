@@ -27,6 +27,7 @@ app.all( '*', function(request, response, next) {
 });
 
 app.post('/', function (request, response, next) {
+	response.status(200).send();
 	openDBConnection(function(mongoDB) {
 		mongoDB.collection('events').save(request.body, function (err, result) {});
 	});
