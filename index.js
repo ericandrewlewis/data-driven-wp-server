@@ -51,7 +51,10 @@ app.get('/', function (request, response) {
 	}
 	db(function(mongo){
 		mongo.collection('events').find().limit(100).toArray(function(err,events) {
-			response.render('index', { events: events });
+			response.render('index', {
+				schema: [ 'mongo uid', 'event', 'user uid', 'width', 'height', 'ua', 'touchenabled' ],
+				events: events
+			});
 		});
 	});
 });

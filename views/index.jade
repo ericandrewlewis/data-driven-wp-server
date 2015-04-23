@@ -6,11 +6,8 @@ html
 		table
 			thead
 				tr
-					td User (md5 hash of site_url + user_id)
-					td Browser width
-					td Browser height
-					td User agent
-					td touch
+					each item in schema
+						td= item
 			tbody
 				each event in events
 					tr
