@@ -3,6 +3,7 @@ var express = require('express'),
 	app = express(),
 	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require('body-parser')
+	serveStatic = require('serve-static')
 	dbConnection = null;
 
 // Use Jade as the templating engine alongside Express.
@@ -11,6 +12,9 @@ app.set('views', './views');
 
 // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files at the URL root.
+app.use( serveStatic(__dirname+'/front-end') );
 
 /**
  * Get the db connection and run the specified callback.
